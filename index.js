@@ -1,4 +1,5 @@
 const addButton = document.querySelector('.addButton');
+const speechButton = document.querySelector('.speechButton');
 var input = document.querySelector('.input');
 const container = document.querySelector('.container');
 
@@ -58,4 +59,31 @@ window.addEventListener('keydown', (e) => {
     if(e.which == 13){
         check();
     }
+})
+
+//Speech Recognition
+var speechRecognition = window.webkitSpeechRecognition;
+var recognition = new speechRecognition();
+
+var content = "";
+
+recognition.interimResults = false;
+
+recognition.onresult = function(event){
+    var last = event.results.length - 1;
+    var command = event.results[last][0].transcript;
+    input.value = command;
+    console.log(command);
+}
+
+recognition.onspeechend = function(){
+    recognition.stop();
+}
+
+recognition.onerror = function(e) {
+    console.log('Speech recognition error detected: ' + e.error);
+}
+
+document.querySelector("#speechButton").addEventListener("click", function(){
+    recognition.start();
 })
